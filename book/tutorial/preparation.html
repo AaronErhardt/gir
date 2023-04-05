@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Tutorial - Generate Rust bindings for GIR based libraries</title>
+        <title>Preparation - Generate Rust bindings for GIR based libraries</title>
 
 
         <!-- Custom HTML head -->
@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../tutorial/introduction.html" class="active"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/preparation.html"><strong aria-hidden="true">2.1.</strong> Preparation</a></li><li class="chapter-item expanded "><a href="../tutorial/finding_gir_files.html"><strong aria-hidden="true">2.2.</strong> Finding .gir files</a></li><li class="chapter-item expanded "><a href="../tutorial/sys_library.html"><strong aria-hidden="true">2.3.</strong> Generating the FFI library</a></li><li class="chapter-item expanded "><a href="../tutorial/high_level_rust_api.html"><strong aria-hidden="true">2.4.</strong> Generating the Rust API</a></li><li class="chapter-item expanded "><a href="../tutorial/handling_errors.html"><strong aria-hidden="true">2.5.</strong> Handling generation errors</a></li><li class="chapter-item expanded "><a href="../tutorial/generate_docs.html"><strong aria-hidden="true">2.6.</strong> Generating documentation</a></li></ol></li><li class="chapter-item expanded "><a href="../config/introduction.html"><strong aria-hidden="true">3.</strong> Configuration files</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../config/ffi.html"><strong aria-hidden="true">3.1.</strong> FFI Options</a></li><li class="chapter-item expanded "><a href="../config/api.html"><strong aria-hidden="true">3.2.</strong> API Options</a></li><li class="chapter-item expanded "><a href="../config/name_override.html"><strong aria-hidden="true">3.3.</strong> Crate name override</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../tutorial/introduction.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/preparation.html" class="active"><strong aria-hidden="true">2.1.</strong> Preparation</a></li><li class="chapter-item expanded "><a href="../tutorial/finding_gir_files.html"><strong aria-hidden="true">2.2.</strong> Finding .gir files</a></li><li class="chapter-item expanded "><a href="../tutorial/sys_library.html"><strong aria-hidden="true">2.3.</strong> Generating the FFI library</a></li><li class="chapter-item expanded "><a href="../tutorial/high_level_rust_api.html"><strong aria-hidden="true">2.4.</strong> Generating the Rust API</a></li><li class="chapter-item expanded "><a href="../tutorial/handling_errors.html"><strong aria-hidden="true">2.5.</strong> Handling generation errors</a></li><li class="chapter-item expanded "><a href="../tutorial/generate_docs.html"><strong aria-hidden="true">2.6.</strong> Generating documentation</a></li></ol></li><li class="chapter-item expanded "><a href="../config/introduction.html"><strong aria-hidden="true">3.</strong> Configuration files</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../config/ffi.html"><strong aria-hidden="true">3.1.</strong> FFI Options</a></li><li class="chapter-item expanded "><a href="../config/api.html"><strong aria-hidden="true">3.2.</strong> API Options</a></li><li class="chapter-item expanded "><a href="../config/name_override.html"><strong aria-hidden="true">3.3.</strong> Crate name override</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -121,7 +121,7 @@
                         <a href="https://github.com/gtk-rs/gir/tree/master/book" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/gtk-rs/gir/edit/master/book/src/tutorial/introduction.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/gtk-rs/gir/edit/master/book/src/tutorial/preparation.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -150,25 +150,80 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="tutorial"><a class="header" href="#tutorial">Tutorial</a></h1>
-<p>In this tutorial, we go through the basic steps needed to generate a safe wrapper for a simple C library.
-We start with finding the .gir files needed and end with generating the documentation.
-We also look at a few common errors and how to fix them.
-Because this can be a bit abstract sometimes, we use the creation of the bindings for <a href="https://docs.gtk.org/Pango/">Pango</a> as an example.
-The example continues through all of the chapters of the tutorial.
-If you follow along until the end, you will have generated a safe wrapper including the documentation.
-In case you are stuck at any point or there are other errors and you can't figure out what's going on, don't hesitate to reach us so we can give you a hand!</p>
-<p>Let's dive right into it and let's set up our project folder!</p>
+                        <h1 id="preparation"><a class="header" href="#preparation">Preparation</a></h1>
+<p>In order to install gir and nicely structure the project, there are a few things to set up.</p>
+<h2 id="set-up-the-project-folder"><a class="header" href="#set-up-the-project-folder">Set up the project folder</a></h2>
+<p>In order to keep the project folder nicely organized, let's create a folder where we will work in and initialize the repo.
+We will create two library crates.
+pango will contain the safe wrapper crate and because it is a wrapper for the unsafe bindings, we create the pango-sys crate within the pango crate.
+If no Cargo.toml file is present in the sys create, a new one will be generated, so let's be safe and delete the automatically created file before we begin.
+The following commands will set up the project folder as described.</p>
+<pre><code class="language-sh">mkdir gir-tutorial
+cd gir-tutorial/
+git init
+cargo new pango --lib
+cd pango
+cargo new pango-sys --lib
+rm pango-sys/Cargo.toml
+</code></pre>
+<p>We will also create a file called &quot;Gir.toml&quot; in each of the crates.</p>
+<pre><code class="language-sh">touch Gir.toml
+touch pango-sys/Gir.toml
+cd ..
+</code></pre>
+<h2 id="installing-gir"><a class="header" href="#installing-gir">Installing gir</a></h2>
+<p>Of course we also need to download and install <a href="https://github.com/gtk-rs/gir">gir</a>.</p>
+<pre><code class="language-sh">git submodule add https://github.com/gtk-rs/gir
+git config -f .gitmodules submodule.gir.update none
+git submodule set-branch --branch master -- ./gir
+cd gir
+cargo install --path .
+cd ..
+</code></pre>
+<p>By adding it as a submodule, we are able to fetch future updates of the tool and we always exactly know which gir version we used to generate our bindings.
+We also change the setting so that the submodule is not automatically checked out, otherwise anyone using your library from git will have the useless submodule checked out.
+Run <code>git submodule update --checkout</code> if you want to update the submodule.
+Then we set the branch of the submodule to master.</p>
+<p>If there are any updates to gir in the future, we can install them by opening our project folder <code>gir-tutorial</code> and running</p>
+<pre><code class="language-sh">git submodule update --remote
+cd gir
+cargo install --path .
+cd ..
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>You should now have a folder looking like this:</p>
+<pre><code class="language-text">gir
+  |
+  |---- ...
+pango/
+  |
+  |---- Cargo.toml
+  |---- Gir.toml
+  |---- pango-sys/
+  |       |
+  |       |---- Gir.toml
+  |       |---- src/
+  |              |
+  |              |---- lib.rs
+  |---- src/
+          |
+          |---- lib.rs
+.git
+  |
+  |---- ...
+.gitmodules
+</code></pre>
+<p>Now that we installed gir and prepared our project folder, let's get the .gir files.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../tutorial/introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../tutorial/preparation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../tutorial/finding_gir_files.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -178,11 +233,11 @@ In case you are stuck at any point or there are other errors and you can't figur
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../tutorial/introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../tutorial/preparation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../tutorial/finding_gir_files.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

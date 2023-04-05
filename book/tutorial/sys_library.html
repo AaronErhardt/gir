@@ -4,44 +4,43 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Generating the FFI library - Generate Rust bindings for GIR based libraries</title>
-                
+
 
         <!-- Custom HTML head -->
         
-
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-                <link rel="icon" href="../favicon.svg">
-                        <link rel="shortcut icon" href="../favicon.png">
-                <link rel="stylesheet" href="../css/variables.css">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
         <link rel="stylesheet" href="../css/general.css">
         <link rel="stylesheet" href="../css/chrome.css">
-                <link rel="stylesheet" href="../css/print.css" media="print">
-        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
-                <link rel="stylesheet" href="../fonts/fonts.css">
-        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="../highlight.css">
         <link rel="stylesheet" href="../tomorrow-night.css">
         <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
-        
-            </head>
+
+    </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -57,7 +56,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -69,12 +68,14 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -82,15 +83,15 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../config_introduction.html"><strong aria-hidden="true">2.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../config_ffi.html"><strong aria-hidden="true">2.1.</strong> FFI Options</a></li><li class="chapter-item expanded "><a href="../config_api.html"><strong aria-hidden="true">2.2.</strong> API Options</a></li><li class="chapter-item expanded "><a href="../config_name_override.html"><strong aria-hidden="true">2.3.</strong> Crate name override</a></li></ol></li><li class="chapter-item expanded "><a href="../tutorial/introduction.html"><strong aria-hidden="true">3.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/sys_library.html" class="active"><strong aria-hidden="true">3.1.</strong> Generating the FFI library</a></li><li class="chapter-item expanded "><a href="../tutorial/high_level_rust_api.html"><strong aria-hidden="true">3.2.</strong> Generating the Rust API</a></li><li class="chapter-item expanded "><a href="../tutorial/handling_errors.html"><strong aria-hidden="true">3.3.</strong> Handling generation errors</a></li></ol></li><li class="chapter-item expanded "><a href="../generate_docs.html"><strong aria-hidden="true">4.</strong> Generating documentation</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../tutorial/introduction.html"><strong aria-hidden="true">2.</strong> Tutorial</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../tutorial/preparation.html"><strong aria-hidden="true">2.1.</strong> Preparation</a></li><li class="chapter-item expanded "><a href="../tutorial/finding_gir_files.html"><strong aria-hidden="true">2.2.</strong> Finding .gir files</a></li><li class="chapter-item expanded "><a href="../tutorial/sys_library.html" class="active"><strong aria-hidden="true">2.3.</strong> Generating the FFI library</a></li><li class="chapter-item expanded "><a href="../tutorial/high_level_rust_api.html"><strong aria-hidden="true">2.4.</strong> Generating the Rust API</a></li><li class="chapter-item expanded "><a href="../tutorial/handling_errors.html"><strong aria-hidden="true">2.5.</strong> Handling generation errors</a></li><li class="chapter-item expanded "><a href="../tutorial/generate_docs.html"><strong aria-hidden="true">2.6.</strong> Generating documentation</a></li></ol></li><li class="chapter-item expanded "><a href="../config/introduction.html"><strong aria-hidden="true">3.</strong> Configuration files</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../config/ffi.html"><strong aria-hidden="true">3.1.</strong> FFI Options</a></li><li class="chapter-item expanded "><a href="../config/api.html"><strong aria-hidden="true">3.2.</strong> API Options</a></li><li class="chapter-item expanded "><a href="../config/name_override.html"><strong aria-hidden="true">3.3.</strong> Crate name override</a></li></ol></li></ol>
+            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -100,28 +101,34 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                                                <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
-                                            </div>
+                    </div>
 
                     <h1 class="menu-title">Generate Rust bindings for GIR based libraries</h1>
 
                     <div class="right-buttons">
-                                                <a href="../print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                                                                        
+                        <a href="https://github.com/gtk-rs/gir/tree/master/book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/gtk-rs/gir/edit/master/book/src/tutorial/sys_library.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
                     </div>
                 </div>
 
-                                <div id="search-wrapper" class="hidden">
+                <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
                         <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
@@ -131,9 +138,9 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -144,164 +151,162 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="generating-the-ffi-library"><a class="header" href="#generating-the-ffi-library">Generating the FFI library</a></h1>
-<p>First, you'll need to download <a href="https://github.com/gtk-rs/gir">gir</a>:</p>
-<pre><code class="language-console">&gt; git clone https://github.com/gtk-rs/gir
-&gt; cd gir
-&gt; cargo install --path . # so we can use gir binary directly
+<p>We have installed <a href="https://github.com/gtk-rs/gir">gir</a>, set up our repo and have all the <code>.gir</code> files we need.
+Now let's work on the unsafe bindings of the -sys crate.
+Let's change into the directory of the sys crate.</p>
+<pre><code class="language-sh">cd pango/pango-sys
 </code></pre>
-<p>Then the <code>.gir</code> files (luckily for you, we have a repository which contains all the ones you need for sourceview!):</p>
-<pre><code class="language-console">&gt; git clone https://github.com/gtk-rs/gir-files
-</code></pre>
-<p>If you look into <code>gir-files</code>, you'll see a file named <code>GtkSource-3.0.gir</code>. That's the one for sourceview.</p>
-<p>Now let's create a new project for our <code>sourceview</code> crate:</p>
-<pre><code class="language-console">&gt; cargo new sourceview --lib
-</code></pre>
-<p>Then let's create a folder inside the newly created <code>sourceview</code> folder for the <code>sys</code> part:</p>
-<pre><code class="language-console">&gt; cd sourceview
-&gt; cargo new sourceview-sys --lib
-</code></pre>
-<p>To indicate to <a href="https://github.com/gtk-rs/gir">gir</a> what to generate, we'll need a <code>Gir.toml</code> file (inside the <code>sourceview-sys</code> folder) containing:</p>
+<h2 id="the-girtoml-file"><a class="header" href="#the-girtoml-file">The Gir.toml file</a></h2>
+<p>The first step is to let <a href="https://github.com/gtk-rs/gir">gir</a> know what to generate.
+This is what the <code>Gir.toml</code> file that we created inside the <code>pango-sys</code> folder is for.
+This file will not be replaced when we run gir again.
+The file is currently empty so let's add the following to it:</p>
 <pre><code class="language-toml">[options]
-library = &quot;GtkSource&quot;
-version = &quot;3.0&quot;
+library = &quot;Pango&quot;
+version = &quot;1.0&quot;
+min_cfg_version = &quot;1.0&quot;
 target_path = &quot;.&quot;
-min_cfg_version = &quot;3.0&quot;
+girs_directories = [&quot;../../gir-files/&quot;]
+work_mode = &quot;sys&quot;
+single_version_file = true
 </code></pre>
 <ul>
-<li><code>library</code> stands for the library we want to generate.</li>
-<li><code>version</code> stands for the version of the library to be used.</li>
-<li><code>target_path</code> stands for the location where the files will be generated.</li>
+<li><code>library</code> stands for the name of the library we want to generate.</li>
+<li><code>version</code> stands for the version of the library to be used. </li>
 <li><code>min_cfg_version</code> will be the minimum version supported by the generated bindings.</li>
+<li><code>target_path</code> stands for the location where the files will be generated.</li>
+<li><code>girs_directories</code> stands for the location of the <code>.gir</code> files.</li>
+<li><code>work_mode</code> stands for the mode gir is using.
+The options here are <code>sys</code> and <code>normal</code>.</li>
+<li><code>single_version_file</code> is a very useful option when you have a lot of generated files (like we'll have).
+Instead of generating the gir hash commit used for the generation in the header of all generated files, it'll just write it inside one file, removing <code>git diff</code> noise <strong>a lot</strong>.</li>
 </ul>
-<p>You should now have a folder looking like this:</p>
-<pre><code class="language-text">sourceview/
-  |
-  |---- Cargo.toml
-  |---- sourceview-sys/
-  |       |
-  |       |---- Cargo.toml
-  |       |---- Gir.toml
-  |       |---- src/
-  |               |
-  |               |---- lib.rs
-  |---- src/
-          |
-          |---- lib.rs
-</code></pre>
+<p>You can find out the values for <code>library</code> and <code>version</code> by looking at the name of the .gir file of your library.
+In our case it is called Pango-1.0.gir.
+This tells us that the <code>library</code> is Pango and the <code>version</code> is 1.0.
+If you don't know what value to use for <code>min_cfg_version</code>, use the same as you use for <code>version</code>.
+If not all needed <code>.gir</code> files reside in <code>../../gir-files/</code>, you can add the path to the other files by changing <code>girs_directories</code>.
+If for example you also have <code>.gir</code> files in the root of your project folder, change it to <code>girs_directories = [&quot;../../gir-files/&quot;, &quot;../..&quot;]</code>.
+Because we are generating the unsafe bindings, we use the <code>sys</code> work mode.</p>
 <p>Let's generate the <code>sys</code> crate now:</p>
-<pre><code class="language-console">&gt; cd sourceview-sys
-&gt; # Run gir in &quot;sys&quot; mode (the &quot;-m&quot; option) and we give the gir files path (the &quot;-d&quot; option)
-&gt; gir -m sys -d ../../gir-files/
+<pre><code class="language-sh">gir -o .
 </code></pre>
-<p>(In case a failure happens at this point, and you can't figure out what's going on, don't hesitate to reach us so we can give you a hand!)</p>
-<p>You should now see new files (and a new folder):</p>
+<p>You should now see new files and a new folder.</p>
 <ul>
 <li><code>build.rs</code></li>
 <li><code>Cargo.toml</code></li>
+<li><code>Gir.toml</code></li>
 <li><code>src/lib.rs</code></li>
 <li><code>tests/</code></li>
 </ul>
 <p>Now let's try to build it:</p>
-<pre><code class="language-console">&gt; cargo build
+<pre><code class="language-sh">cargo build
 </code></pre>
-<p>Surprise! It doesn't build at all and you should see a loooooot of errors. Well, that was expected. We need to add some dependencies (you can find which ones in the <code>.gir</code> files) in order to make it work. Let's update our <code>Gir.toml</code> file to make it look like this:</p>
+<p>Surprise.
+It doesn't build at all and you should see a lot of errors.
+Well, that was expected.
+We need to add some dependencies in order to make it work.
+Have a look at the errors of the compiler to find out which are missing.
+In our example, the compiler throws the following errors:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use of undeclared crate or module `glib`
+use of undeclared crate or module `gobject`
+<span class="boring">}</span></code></pre></pre>
+<p>The dependencies need to be added to the <code>external_libraries</code> part.
+The names of the dependencies are the same as in the .gir files and not what the packages to install the libraries might be called.
+The compiler told us that the <code>GLib</code> and the <code>GObject</code> dependencies are missing.
+Let's update our <code>Gir.toml</code> file to fix it:</p>
 <pre><code class="language-toml">[options]
-library = &quot;GtkSource&quot;
-version = &quot;3.0&quot;
+library = &quot;Pango&quot;
+version = &quot;1.0&quot;
+min_cfg_version = &quot;1.0&quot;
 target_path = &quot;.&quot;
-min_cfg_version = &quot;3.0&quot;
-
-external_libraries = [
-    &quot;Cairo&quot;,
-    &quot;Gdk&quot;,
-    &quot;GdkPixbuf&quot;,
-    &quot;Gio&quot;,
-    &quot;GLib&quot;,
-    &quot;GObject&quot;,
-    &quot;Gtk&quot;,
-]
-</code></pre>
-<p>Now we regenerate it then rebuild it:</p>
-<pre><code class="language-console">&gt; rm Cargo.* # we remove Cargo files
-&gt; gir -m sys -d ../../gir-files/
-&gt; cargo build
-</code></pre>
-<p>Should work just fine!</p>
-<p>We can cleanup the command line a bit now. You can actually give the work mode (&quot;-m&quot; option) and the gir files repository through the <code>Gir.toml</code> file using &quot;work_mode&quot; and &quot;girs_dir&quot; options:</p>
-<pre><code class="language-toml">[options]
-library = &quot;GtkSource&quot;
-version = &quot;3.0&quot;
-target_path = &quot;.&quot;
-min_cfg_version = &quot;3.0&quot;
+girs_directories = [&quot;../../gir-files/&quot;]
 work_mode = &quot;sys&quot;
-girs_dir = &quot;../../gir-files/&quot;
 
 external_libraries = [
-    &quot;Cairo&quot;,
-    &quot;Gdk&quot;,
-    &quot;GdkPixbuf&quot;,
-    &quot;Gio&quot;,
     &quot;GLib&quot;,
     &quot;GObject&quot;,
-    &quot;Gtk&quot;,
 ]
 </code></pre>
-<p>Now, if you want to regenerate, just run:</p>
-<pre><code class="language-console">&gt; gir
+<p>If one of your .gir files changed or you want to use an updated version of gir to generate the code, there is no need to delete the Cargo.toml or the Cargo.lock files before you regenerate the code.
+Because we made some changes to the Gir.toml file, we have to run gir again.
+Changing the content of the external_libraries array means that additional dependencies have to be added.
+gir does this automatically for you, but only if there is no Cargo.toml and no Cargo.lock file present.
+Just remove the <code>Cargo.*</code> files and run gir again and the additional dependencies will be added.
+If you made any manual changes to the file, you would have to do these changes again.
+After regenerating the code, we build the crate to see if the errors are gone.</p>
+<pre><code class="language-sh">rm Cargo.*
+gir -o .
+cargo build
 </code></pre>
-<p>Now we have a working <code>sys</code> containing all functions and objects definition. Just to be sure everything was correctly generated, we can run some tests (graciously generated by <a href="https://github.com/gtk-rs/gir">gir</a> as well):</p>
-<pre><code class="language-console">&gt; cargo test
+<p>When executing the above commands, there should not be any errors and everything should work fine.
+Just to be sure everything was correctly generated, we can run some tests (graciously generated by <a href="https://github.com/gtk-rs/gir">gir</a> as well):</p>
+<pre><code class="language-sh">cargo test
 </code></pre>
-<p>Normally, all tests passed. If you get an error when running those tests, it's very likely that the <code>sys</code> generation is invalid and/or incomplete.</p>
+<p>Normally, all tests passed.
+If you get an error when running those tests, it's very likely that the <code>sys</code> generation is invalid and/or incomplete.</p>
+<h2 id="the-girtoml-file-1"><a class="header" href="#the-girtoml-file-1">The Gir.toml file</a></h2>
+<p>This file was automatically generated but it will not be replaced when we run gir again.
+Make sure to look at your Cargo.toml to optionally add more information to it.
+If there are any <code>[features]</code>, you should try building and testing with these features activated as well.
+If you'd like, you can also set the default features.
+This can be useful for example if you want to always activate the newest version unless the user of the crate specifies an older version.</p>
+<p>For our example, we now have a working <code>sys</code> crate containing all functions and objects definition.
+We are done here and can go back to the folder of the wrapper crate:</p>
+<pre><code class="language-sh">cd ..
+</code></pre>
 <p>Time to generate the high-level Rust API!</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                                                    <a rel="prev" href="../tutorial/introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../tutorial/finding_gir_files.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                        
-                                                    <a rel="next" href="../tutorial/high_level_rust_api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+
+                            <a rel="next" href="../tutorial/high_level_rust_api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
-                        
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                                    <a rel="prev" href="../tutorial/introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../tutorial/finding_gir_files.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                
-                                    <a rel="next" href="../tutorial/high_level_rust_api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+
+                    <a rel="next" href="../tutorial/high_level_rust_api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                            </nav>
+            </nav>
 
         </div>
 
-        
-        
-        
-                <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        
-        
-                <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
-        
-        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
-        
-        
+
+
+    </div>
     </body>
 </html>
